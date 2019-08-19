@@ -129,7 +129,7 @@ def save_model(model, model_filepath):
         model_filepath - location of where to save .pkl file
     
     """
-    filename = 'model.pkl'
+    filename = 'classifier.pkl'
     pickle.dump(model, open(filename, 'wb'))
 
 
