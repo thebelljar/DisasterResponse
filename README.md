@@ -1,7 +1,7 @@
 # DisasterResponse
 Classification of messages into disaster response relevant categories
 
-## ** 1. Summary**
+## **1. Summary**
 
 The project is the fifth project for Udacity's Data Science for Enterprise nano-degree. This project is putting to use my newly acquired sofware development and data engeneering skills in order to analyze data gathered and compiled during disaster by a company called Figure Eight and build an API that classifier the messages into possible disaster-related categories. 
 
