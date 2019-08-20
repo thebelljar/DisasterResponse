@@ -43,8 +43,7 @@ def clean_data(df):
 def save_data(df, database_filename):
     """Saves DataFrame (df) to database path"""     
     engine = create_engine('sqlite:///'+ database_filename)
-    df.to_sql('df', engine, index=False)
-    pass  
+    df.to_sql('df', engine, index=False, if_exists='replace') 
 
 def main():
     if len(sys.argv) == 4:
