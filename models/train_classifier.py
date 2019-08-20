@@ -92,7 +92,12 @@ def build_model():
         ('clf', MultiOutputClassifier(AdaBoostClassifier()))
     ])
     
-    return model
+    parameters = {'clf__estimator__max_depth': [10, 50, None],
+                  'clf__estimator__min_samples_leaf':[2, 5, 10]}     
+
+    cv = GridSearchCV(model, param_grid=parameters)
+    
+    return cv
 
 
 
