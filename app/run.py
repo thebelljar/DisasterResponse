@@ -1,6 +1,7 @@
 import json
 import plotly
 import pandas as pd
+import numpy as np
 import nltk
 
 from nltk.stem import WordNetLemmatizer
@@ -9,7 +10,7 @@ nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Histogram
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -46,12 +47,18 @@ def tokenize(text):
 
     return clean_tokens
 
+def compute_text_length(data):
+    return np.array([len(text) for text in data]).reshape(-1, 1)
+
 # load data
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('df', engine)
 
 # load model
 model = joblib.load("../models/classifier.pkl")
+
+# Calculate the message length
+df['text_length'] = compute_text_length(df['message'])
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -113,7 +120,7 @@ def index():
                 }
             }
         },
-              # The third graph shows the distribution of message lengths 
+             # The third graph shows the distribution of message lengths        
         {
             'data': [
                 Histogram(
@@ -136,14 +143,13 @@ def index():
             'layout': {
                 'title': 'Distribution of Text Length',
                 'yaxis':{
-                    'title':'Count'
+                    'title':'Count of Messages'
                 },
                 'xaxis': {
-                    'title':'Text Length'
+                    'title':'Text Length (in characters)'
                 }
             }
         }
- 
     ]
     
     # encode plotly graphs in JSON
