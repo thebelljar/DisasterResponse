@@ -59,16 +59,20 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/index')
 def index():
     
-    # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    # extract genre counts
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    # extract categories
     category_names = df.iloc[:,4:].columns
     category_boolean = (df.iloc[:,4:] != 0).sum().values
     
-    # create visuals
-    # TODO: Below is an example - modify to create your own visuals
+    # extract message lenths
+    length_direct = df.loc[df.genre=='direct','text_length']
+    length_social = df.loc[df.genre=='social','text_length']
+    length_news = df.loc[df.genre=='news','text_length']
+    
+    # create the graphs
     graphs = [
         # The first graph visualizes the genre column
         {
@@ -108,7 +112,38 @@ def index():
                     'tickangle': 35
                 }
             }
+        },
+              # The third graph shows the distribution of message lengths 
+        {
+            'data': [
+                Histogram(
+                    y=length_direct,
+                    name='Direct',
+                    opacity=0.5
+                ),
+                Histogram(
+                    y=length_social,
+                    name='Social',
+                    opacity=0.5
+                ),
+                Histogram(
+                    y=length_news,
+                    name='News',
+                    opacity=0.5
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Text Length',
+                'yaxis':{
+                    'title':'Count'
+                },
+                'xaxis': {
+                    'title':'Text Length'
+                }
+            }
         }
+ 
     ]
     
     # encode plotly graphs in JSON
